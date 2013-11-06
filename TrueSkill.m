@@ -15,7 +15,7 @@ function [Ms, Ps] = myTrueSkillCal(M, par_beta, prior_mean, prior_pre)
 % M = number of player
 % par_beta = variance of performance
 % prior_mean = the mean of prior distribution of players
-% priro_pre = the precision of prior distribution of players
+% prior_pre = the precision of prior distribution of players
 
 	psi = inline('normpdf(x)./normcdf(x)');
 	lambda = inline('(normpdf(x)./normcdf(x)).*( (normpdf(x)./normcdf(x)) + x)');
