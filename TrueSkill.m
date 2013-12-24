@@ -1,13 +1,14 @@
-function a1 = TrueSkill()
+function [a1, b] = TrueSkill()
 % This is the pure trueskill implementation
 % which is similar to TrueSkill Calculator provided by Microsoft
 % http://atom.research.microsoft.com/trueskill/rankcalculator.aspx
 % but it does not support team formation
-M = 1000000;
+M = 10;
 beta =  4.15;
-mean = ones(1, M)' * 25;
-prec = ones(1, M)' * 0.014515895;
+mean = ones(1, M)' * 25; % it is the default value in TrueSkill paper
+prec = ones(1, M)' * 0.014515895; % it is the default value in TrueSkill paper
 [a1, b] = myTrueSkillCal(M, beta, mean, prec);
+
 end
 
 function [Ms, Ps] = myTrueSkillCal(M, par_beta, prior_mean, prior_pre)
@@ -39,7 +40,7 @@ function [Ms, Ps] = myTrueSkillCal(M, par_beta, prior_mean, prior_pre)
 		%(1) compute the posterior over skill variables
 		Ps = prior_pre + prec_m_9;
 		Ms = (prior_mean .* prior_pre + mean_m_9 .* prec_m_9)./Ps;
-
+        
 		%(2) compute the message from factor to performance
 		a = 1./(1 + par_beta^2 .* (Ps - prec_m_9));
 		prec_m_2 = a .* (Ps - prec_m_9);
@@ -91,8 +92,18 @@ function [Ms, Ps] = myTrueSkillCal(M, par_beta, prior_mean, prior_pre)
 		prec_m_9 = a1 .* (prec_m_3 - prec_m_2);
 		mean_m_9 = a1 .* ((prec_m_3 .* mean_m_3 - prec_m_2 .* mean_m_2)./prec_m_9);
 
-	end
-
+    end
 end
 
+function matrix = create_position_matrix(M)
+% Input:
+% M : number of player playing the game
+% Output is the matrix of order of player after game
+% For example: output matrix is [1 2; 2 3; 3 4] means player 1 is ranked
+% higher than player 2, player 2 is ranked higher than player 3 and player
+% 3 is ranked higher than player 4
+    for i = 1:(M-1)
+        matrix(i, :) = [i (i+1)];
+    end
+end
 
