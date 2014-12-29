@@ -1,4 +1,5 @@
 function [ names, years, data ] = readInput(fname)
+% [ names, years, data ] = readInput(fname)
 % read and parse input file
 %   names: cell array contains name of player
 %   years: vector contains year
