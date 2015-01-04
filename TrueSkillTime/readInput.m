@@ -7,9 +7,11 @@ function [ names, years, data ] = readInput(fname)
 %         For example: data{1} is data of year (for example) 1820 
 %         and years(1) = 1820
 %         data{i}.games(j, :) is a j-th game which occurs between 2 players
-%         a and b. Name of a is value of names{a}, similar to b. If a wins
+%         whose ids are
+%         a and b. Name of a is value of names{d.players(a)}, similar to b. If a wins
 %         over b, data{i}.result(j) = 1; if a loses, data{i}.result(j) = -1
-%         and if draw data{i}.result(j) = 0
+%         and if draw data{i}.result(j) = 0. d.players is list of player id
+%         in this year.
 
     fid = fopen(fname);
     if (fid == -1)
@@ -52,7 +54,8 @@ function [ names, years, data ] = readInput(fname)
                 init_year = year;
             else
                 d.result = result;
-                d.games = games;
+                d.players = unique(games);
+                d.games = loopFR(games, d.players);
                 data{length(years) + 1} = d;
                 result = [];
                 games = [];
