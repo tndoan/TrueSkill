@@ -9,7 +9,8 @@ function [ names, years, data ] = readInput(fname)
 %         data{i}.games(j, :) is a j-th game which occurs between 2 players
 %         whose ids are
 %         a and b. Name of a is value of names{d.players(a)}, similar to b. If a wins
-%         over b, data{i}.result(j) = 1; if a loses, data{i}.result(j) = -1
+%         over b, data{i}.result(j) = 1; if a loses, data{i}.games(j, :) =
+%         [b a]
 %         and if draw data{i}.result(j) = 0. d.players is list of player id
 %         in this year.
 
@@ -63,15 +64,16 @@ function [ names, years, data ] = readInput(fname)
                 years = [years; year];
             end
         end
-        
-        games = [games; id1 id2];
       
         if s1 > s2       % player 1 wins over player 2
             result = [result; 1];
+            games = [games; id1 id2];
         elseif s2 > s1   % player 2 wins over player 1
-            result = [result; -1];
+            result = [result; 1];
+            games = [games; id2 id1];
         else             % draw
             result = [result; 0];
+            games = [games; id1 id2];
         end
     end
     
